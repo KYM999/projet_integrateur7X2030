@@ -36,21 +36,21 @@ INSERT INTO organisation (id_personnel, type_org) VALUES
 
 /* ── 3. Externes ──────────────────────────────────────────────────────────  */
 -- PER0002 → magasinière (salariée SAC = externe dans la modélisation)
--- PER0004 → emballeuse
+-- PER0004 → emballeuse externe
 -- PER0005 → livreur
--- PER0007 → conducteur pour PER0003
+-- PER0007 → livreur pour PER0003
 
 INSERT INTO externe (id_personnel, role_externe) VALUES
   ('PER0002', 'Magasinier'),
-  ('PER0004', 'Magasinier'),
-  ('PER0005', 'Conducteur'),
-  ('PER0007', 'Conducteur');
+  ('PER0004', 'Emballeur'),
+  ('PER0005', 'Livreur'),
+  ('PER0007', 'Livreur');
 
 /* ── 4. Répertoire (association Organisation × Externe) ───────────────────  */
 INSERT INTO repertoire (id_organisation, id_externe, role) VALUES
-  ('PER0003', 'PER0007', 'Conducteur'),
+  ('PER0003', 'PER0007', 'Livreur'),
   ('PER0001', 'PER0002', 'Magasinier'),
-  ('PER0001', 'PER0004', 'Magasinier');
+  ('PER0001', 'PER0004', 'Emballeur');
 
 /* ── 5. Entrepôt ──────────────────────────────────────────────────────────  */
 INSERT INTO entrepot (no_entrepot, longueur, largeur, hauteur, masse_maximale) VALUES
@@ -188,3 +188,4 @@ BEGIN
   RAISE NOTICE 'JDD_01 : toutes les assertions passent.';
 END;
 $$;
+
