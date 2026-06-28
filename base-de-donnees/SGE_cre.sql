@@ -33,7 +33,7 @@ CREATE DOMAIN dom_mesure AS numeric(12,3)
 /* ── Types énumérés ──────────────────────────────────────────────────────── */
 
 CREATE TYPE sexe_type       AS ENUM ('F', 'M', 'X');
-CREATE TYPE role_repertoire AS ENUM ('Conducteur', 'Magasinier', 'Acheteur', 'Vendeur');
+CREATE TYPE role_repertoire AS ENUM ('Responsable stocks', 'Responsable logistique', 'Agent logistique', 'Fournisseur', 'Magasinier', 'Responsable informatique', 'Administrateur', 'Livreur', 'Emballeur');
 CREATE TYPE type_organisation AS ENUM ('Fournisseur', 'Transporteur', 'Destinataire', 'Partenaire');
 CREATE TYPE type_colis      AS ENUM ('entrant', 'sortant');
 CREATE TYPE type_produit    AS ENUM ('materiel', 'logiciel', 'emballage');
@@ -82,7 +82,8 @@ CREATE TABLE personnel (
 CREATE TABLE externe (
   id_personnel  varchar(7) PRIMARY KEY
                   REFERENCES personnel(id_personnel) ON DELETE CASCADE,
-  role_externe  dom_nom    NOT NULL
+  role_externe  dom_nom    NOT NULL,
+  CHECK (role_externe IN ('Responsable stocks', 'Responsable logistique', 'Agent logistique', 'Fournisseur', 'Magasinier', 'Responsable informatique', 'Administrateur', 'Livreur', 'Emballeur'))
 );
 
 CREATE TABLE organisation (
@@ -245,3 +246,5 @@ CREATE INDEX idx_inventaire_lot    ON inventaire_emplacement(id_lot);
 CREATE INDEX idx_cellule_zone      ON cellule(no_zs);
 CREATE INDEX idx_colis_type        ON colis(type);
 CREATE INDEX idx_colis_chargement  ON colis(no_chargement);
+
+
