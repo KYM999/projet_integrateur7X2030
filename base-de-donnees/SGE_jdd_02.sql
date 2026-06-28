@@ -3,10 +3,11 @@
    Jeu de données complet pour l'application SGE — Amazones & Centaures.
    
    Contient :
-     • 11 utilisateurs internes (2 magasiniers, 3 agents logistiques,
-       3 emballeurs, 1 resp. stocks, 1 resp. logistique, 1 admin)
+     • 11 comptes opérationnels (2 magasiniers, 2 agents logistiques,
+       1 resp. informatique, 3 emballeurs externes, 1 resp. stocks,
+       1 resp. logistique, 1 admin)
      • 5 fournisseurs + 2 transporteurs (organisations)
-     • 2 conducteurs externes
+     • 2 livreurs externes
      • 1 entrepôt, 4 zones de stockage, 20 cellules
      • 150 produits (90 matériels, 30 logiciels, 30 emballages)
      • 150 lots (un par produit)
@@ -76,8 +77,9 @@ VALUES
   /* ── Agents logistiques ── */
   ('PER0003','Tchoua',     'Paul',       'M','Deido, Douala',            '+237 655 103 103','1978-11-05'),
   ('PER0004','Essomba',    'Sophie',     'F','Bassa, Douala',            '+237 699 104 104','1995-02-18'),
+  /* ── Responsable informatique ── */
   ('PER0005','Abanda',     'Henri',      'M','Ngodi, Douala',            '+237 677 105 105','1982-09-30'),
-  /* ── Emballeurs ── */
+  /* ── Emballeurs externes ── */
   ('PER0006','Kamgang',    'Alice',      'F','Yaounde Centre',           '+237 655 106 106','1988-06-12'),
   ('PER0007','Fotso',      'Denis',      'M','Bonaberi, Douala',         '+237 699 107 107','1975-12-01'),
   ('PER0008','Onana',      'Grace',      'F','Logbessou, Douala',        '+237 677 108 108','1993-04-25'),
@@ -96,7 +98,7 @@ VALUES
   /* ── Transporteurs ── */
   ('PER0017','TransLog',   'Douala',     'M','Akwa Nord, Douala',        '+237 233 117 117', NULL),
   ('PER0018','RapidoCargo','SA',         'M','Port de Douala',           '+237 233 118 118', NULL),
-  /* ── Conducteurs (externes) ── */
+  /* ── Livreurs externes ── */
   ('PER0019','Kono',       'Sylvestre',  'M','Nkongmondo, Douala',       '+237 699 119 119','1987-02-14'),
   ('PER0020','Messi',      'Bertrand',   'M','Logpom, Douala',           '+237 677 120 120','1984-11-22');
 
@@ -104,7 +106,8 @@ SELECT setval('seq_per', 20);
 
 /* ── Mots de passe ── */
 UPDATE personnel SET mot_de_passe = crypt('magasin123',  gen_salt('bf',10)) WHERE id_personnel IN ('PER0001','PER0002');
-UPDATE personnel SET mot_de_passe = crypt('agent123',    gen_salt('bf',10)) WHERE id_personnel IN ('PER0003','PER0004','PER0005');
+UPDATE personnel SET mot_de_passe = crypt('agent123',    gen_salt('bf',10)) WHERE id_personnel IN ('PER0003','PER0004');
+UPDATE personnel SET mot_de_passe = crypt('respinfo123', gen_salt('bf',10)) WHERE id_personnel  = 'PER0005';
 UPDATE personnel SET mot_de_passe = crypt('embal123',    gen_salt('bf',10)) WHERE id_personnel IN ('PER0006','PER0007','PER0008');
 UPDATE personnel SET mot_de_passe = crypt('respstock123',gen_salt('bf',10)) WHERE id_personnel  = 'PER0009';
 UPDATE personnel SET mot_de_passe = crypt('resplog123',  gen_salt('bf',10)) WHERE id_personnel  = 'PER0010';
@@ -124,7 +127,7 @@ INSERT INTO organisation (id_personnel, type_org) VALUES
   ('PER0018','Transporteur');
 
 /* =============================================================================
-   3. EXTERNES (personnel SAC + conducteurs)
+   3. ROLES DES INTERVENANTS (internes + externes)
    ============================================================================= */
 
 INSERT INTO externe (id_personnel, role_externe) VALUES
@@ -132,23 +135,23 @@ INSERT INTO externe (id_personnel, role_externe) VALUES
   ('PER0002','Magasinier'),
   ('PER0003','Agent logistique'),
   ('PER0004','Agent logistique'),
-  ('PER0005','Agent logistique'),
+  ('PER0005','Responsable informatique'),
   ('PER0006','Emballeur'),
   ('PER0007','Emballeur'),
   ('PER0008','Emballeur'),
   ('PER0009','Responsable stocks'),
   ('PER0010','Responsable logistique'),
   ('PER0011','Administrateur'),
-  ('PER0019','Conducteur'),
-  ('PER0020','Conducteur');
+  ('PER0019','Livreur'),
+  ('PER0020','Livreur');
 
 /* =============================================================================
    4. RÉPERTOIRE (appartenance organisation–externe)
    ============================================================================= */
 
 INSERT INTO repertoire (id_organisation, id_externe, role) VALUES
-  ('PER0017','PER0019','Conducteur'),
-  ('PER0018','PER0020','Conducteur');
+  ('PER0017','PER0019','Livreur'),
+  ('PER0018','PER0020','Livreur');
 
 /* =============================================================================
    5. ENTREPÔT
@@ -735,7 +738,7 @@ $$;
    PER0002  Nkolo Marie        Magasinière          mdp: magasin123
    PER0003  Tchoua Paul        Agent logistique     mdp: agent123
    PER0004  Essomba Sophie     Agent logistique     mdp: agent123
-   PER0005  Abanda Henri       Agent logistique     mdp: agent123
+   PER0005  Abanda Henri       Resp. informatique  mdp: respinfo123
    PER0006  Kamgang Alice      Emballeuse           mdp: embal123
    PER0007  Fotso Denis        Emballeur            mdp: embal123
    PER0008  Onana Grace        Emballeuse           mdp: embal123
@@ -743,3 +746,5 @@ $$;
    PER0010  Owona Francoise    Resp. logistique     mdp: resplog123
    PER0011  Dongo Alain        Administrateur       mdp: Admin@2024
    ============================================================================= */
+
+
