@@ -1,0 +1,12 @@
+# ============================================================
+#  SGE_MPS_01 — Variables d'environnement
+#  Fichier : .env  (NE PAS COMMITTER sur Git !)
+#  Auteur  : DJUISSI NZIKO Andréah Laureen — Groupe 7
+# ============================================================
+
+# Base de données PostgreSQL
+#DB_HOST='localhost'
+#DB_PORT=5434
+#DB_NAME='projet_integrateur'
+#DB_USER='postgres'
+#DB_PASSWORD='azerty'
